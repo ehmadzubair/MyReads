@@ -4,14 +4,22 @@ import ShelfPicker, {ShelfOptions} from './ShelfPicker'
 
 
 class Book extends Component {
+
+    onShelfChanged = (shelfName) => {
+        this.props.onShelfChanged(this.props.book, shelfName)
+    }
+
     render() {
-        let {shelfString, authors, thumbnail, title} = this.props
+        let {shelf, authors, imageLinks, title} = this.props.book
         return (
             <div className="book">
               <div className="book-top">
-                <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${thumbnail}")` }}></div>
+                <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url("${imageLinks.thumbnail}")` }}></div>
                 <div className="book-shelf-changer">
-                    <ShelfPicker selectedOption={ shelfString && ShelfOptions.enumValueOf(shelfString)}/>
+                    <ShelfPicker
+                        selectedOption={ shelf && ShelfOptions.enumValueOf(shelf)}
+                        onShelfChanged={this.onShelfChanged}
+                        />
                 </div>
               </div>
               <div className="book-title">{title}</div>

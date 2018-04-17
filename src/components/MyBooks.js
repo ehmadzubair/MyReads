@@ -1,33 +1,14 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
-import {groupBy} from 'lodash'
-import * as BooksAPI from '../BooksAPI'
 
 import Bookshelf from './Bookshelf'
 
 class MyBooks extends Component {
 
-    state = {
-        'currentlyReading': [],
-        'wantToRead': [],
-        'read': []
-    }
-
-    componentDidMount() {
-        BooksAPI.getAll().then((books) => {
-            let {currentlyReading, wantToRead, read} = groupBy(books, (book) => (book.shelf))
-
-            this.setState({
-                currentlyReading,
-                wantToRead,
-                read
-            })
-        }
-        )
-    }
-
 
     render() {
+        let {books, onShelfChanged} = this.props
+        let {currentlyReading, wantToRead, read} = books
         return (
             <div className="list-books">
               <div className="list-books-title">
@@ -35,9 +16,9 @@ class MyBooks extends Component {
               </div>
               <div className="list-books-content">
                 <div>
-                  <Bookshelf title='Currently Reading' books={this.state.currentlyReading}/>
-                  <Bookshelf title='Want To Read' books={this.state.wantToRead}/>
-                  <Bookshelf title='Read' books={this.state.read}/>
+                  <Bookshelf title='Currently Reading' books={currentlyReading} onShelfChanged={onShelfChanged}/>
+                  <Bookshelf title='Want To Read' books={wantToRead} onShelfChanged={onShelfChanged}/>
+                  <Bookshelf title='Read' books={read} onShelfChanged={onShelfChanged}/>
                 </div>
               </div>
               <div className="open-search">

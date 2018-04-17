@@ -14,13 +14,10 @@ class Bookshelf extends Component {
                 {
                     this.props.books.map((book) =>
                     (
-                        <li>
+                        <li key={book.id}>
                             <Book
-                                key={book.industryIdentifiers[0].identifier}
-                                title={book.title}
-                                authors={book.authors}
-                                thumbnail={book.imageLinks.thumbnail}
-                                shelfString={book.shelf}
+                                book={book}
+                                onShelfChanged={this.props.onShelfChanged}
                             />
                         </li>
                     ))

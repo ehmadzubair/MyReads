@@ -21,10 +21,21 @@ export class ShelfOptions extends Enum {
 ShelfOptions.initEnum(['currentlyReading', 'wantToRead', 'read', 'none']);
 
 class ShelfPicker extends Component {
-    debugger;
+
+    constructor(props) {
+        super(props)
+        this.onSelectionChanged = (event) => {
+            this.props.onShelfChanged(event.target.value)
+        }
+    }
+
+    onSelectionChanged(event) {
+        this.props.onShelfChanged(event.target.value)
+    }
+
     render() {
         return (
-        <select defaultValue={this.props.selectedOption && this.props.selectedOption.name}>
+        <select defaultValue={this.props.selectedOption && this.props.selectedOption.name} onChange={(event) => {this.onSelectionChanged(event)}}>
             <option value="disabled_none" disabled>Move to...</option>
             {
                 ShelfOptions.enumValues.map((option) => {

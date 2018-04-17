@@ -42,18 +42,16 @@ class Search extends Component {
                     value={this.state.searchValue}
                     onChange={(event) => this.handleChange(event)}
                 />
-
               </div>
             </div>
             <div className="search-books-results">
                 <ol className="books-grid">
                 { searchResults.length !== 0 && searchResults.map((book) =>
                     (
-                        <li key={book.industryIdentifiers[0].identifier}>
+                        <li key={book.id}>
                             <Book
-                                title={book.title}
-                                authors={book.authors}
-                                thumbnail={book.imageLinks.thumbnail}
+                                book={book}
+                                onShelfChanged={this.props.onShelfChanged}
                             />
                         </li>
                     )) }
