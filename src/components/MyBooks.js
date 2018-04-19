@@ -7,8 +7,8 @@ class MyBooks extends Component {
 
 
     render() {
-        let {books, onShelfChanged} = this.props
-        let {currentlyReading, wantToRead, read} = books
+        let {currentlyReading, wantToRead, read, onShelfChanged} = this.props
+
         return (
             <div className="list-books">
               <div className="list-books-title">

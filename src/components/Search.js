@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import {search} from '../BooksAPI'
 import Book from './Book'
+import * as _ from 'lodash'
 
 class Search extends Component {
 
@@ -29,8 +30,25 @@ class Search extends Component {
 
     }
 
+    addShelfIfExists = (book) => {
+
+        let {currentlyReadingIDs, wantToReadIDs, readIDs} = this.props
+        book.shelf = 'none'
+        if (_.includes(currentlyReadingIDs, book.id)) {
+            book.shelf = 'currentlyReading'
+        }
+        else if (_.includes(wantToReadIDs, book.id)) {
+            book.shelf = 'wantToRead'
+        }
+        else if (_.includes(readIDs, book.id)) {
+            book.shelf = 'read'
+        }
+        return book
+    }
+
     render() {
         let {searchResults} = this.state
+        debugger;
         return (
           <div className="search-books">
             <div className="search-books-bar">
@@ -46,15 +64,16 @@ class Search extends Component {
             </div>
             <div className="search-books-results">
                 <ol className="books-grid">
-                { searchResults.length !== 0 && searchResults.map((book) =>
-                    (
+                { searchResults.length !== 0 && searchResults.map((book) => {
+                    return (
                         <li key={book.id}>
                             <Book
-                                book={book}
+                                book={this.addShelfIfExists(book)}
                                 onShelfChanged={this.props.onShelfChanged}
                             />
                         </li>
-                    )) }
+                    )
+                }) }
                 </ol>
             </div>
           </div>
