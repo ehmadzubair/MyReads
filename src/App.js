@@ -26,7 +26,6 @@ class BooksApp extends React.Component {
     fetchBooksFromAPI=()=> {
         BooksAPI.getAll().then((books)=> {
             let {currentlyReading, wantToRead, read}=groupBy(books, (book)=> (book.shelf))
-
             this.setState({
                 currentlyReading: currentlyReading.map((book)=> book.id),
                 wantToRead: wantToRead.map((book)=> book.id),
@@ -39,18 +38,21 @@ class BooksApp extends React.Component {
 
     onShelfChanged=(book, shelfName)=> {
         const {allBooks}=this.state
-        BooksAPI.update(book, shelfName).then(({currentlyReading, wantToRead, read})=>
+        BooksAPI.update(book, shelfName).then(({currentlyReading, wantToRead, read})=> {
+            let updatedBooks = [...allBooks, book]
             this.setState({
                 currentlyReading,
                 wantToRead,
                 read,
-                allBooks: allBooks.map((item)=> {
+                allBooks: updatedBooks.map((item)=> {
                     if (item.id===book.id) {
                         item.shelf=shelfName
                     }
                     return item
                 })
             })
+        }
+
         )
     }
 
@@ -58,7 +60,7 @@ class BooksApp extends React.Component {
         let {currentlyReading, wantToRead, read}=this.state
     return (
       <div className="app">
-          <Route exact path="/" render={()=> {
+          <Route exact path='/' render={(props)=> {
               return (
                   <MyBooks
                   currentlyReading={this.state.currentlyReading.map((bookId)=> this.getBookFromID(bookId))}
@@ -68,19 +70,17 @@ class BooksApp extends React.Component {
                   />
               )
           }
-
           } />
-          <Route path="/search" render={()=> {
-              return (
-                  <Search
-                  currentlyReadingIDs={currentlyReading}
-                  wantToReadIDs={wantToRead}
-                  readIDs={read}
-                  onShelfChanged={this.onShelfChanged} />
-              )} }/>
-          }
-
+          <Route path='/search' render={(props)=> {
+                  return (
+                      <Search
+                      currentlyReadingIDs={currentlyReading}
+                      wantToReadIDs={wantToRead}
+                      readIDs={read}
+                      onShelfChanged={this.onShelfChanged} />
+                  )} }/>
       </div>
+
         )
     }
 }

@@ -13,21 +13,30 @@ class Search extends Component {
 
     handleChange(event) {
         let searchValue = event.target.value
-        this.setState({searchValue})
+        this.setState({searchValue}, () => this.fetchSearchResults())
+
+
+    }
+
+    fetchSearchResults = () => {
+        let {searchValue} = this.state
+        console.log(`SearchValue : ${searchValue}`)
 
         if (this.state.searchValue.length === 0) {
+            console.log(`Emptying state`)
             this.setState({
                 searchResults : []
             })
         }
-        else if (this.state.searchValue.length >= 2) {
-            search(this.state.searchValue).then((searchResults) =>
+        else if (searchValue.length%2 === 0){
+            search(this.state.searchValue).then((searchResults) => {
+            console.log(`Setting state for query: ${searchValue}`)
             this.setState({
                 searchResults: searchResults.error ? [] : searchResults
             })
+        }
             )
         }
-
     }
 
     addShelfIfExists = (book) => {
@@ -48,7 +57,6 @@ class Search extends Component {
 
     render() {
         let {searchResults} = this.state
-        debugger;
         return (
           <div className="search-books">
             <div className="search-books-bar">
